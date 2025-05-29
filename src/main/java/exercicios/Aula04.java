@@ -67,14 +67,18 @@ public class Aula04 extends Aula {
     }
 
     protected double maiorNotaTodosEstudantes(@NonNull final Stream<Estudante> stream){
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return -1;
+        return stream.mapToDouble(e -> e.getNota())
+                .max()
+                .orElse(0);
+
     }
 
 
     protected double maiorNotaHomens(@NonNull final Stream<Estudante> stream){
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return -1;
+        return stream.filter(e -> e.getSexo()=='M')
+                .mapToDouble(e -> e.getNota())
+                .max()
+                .orElse(0);
     }
 }
 
