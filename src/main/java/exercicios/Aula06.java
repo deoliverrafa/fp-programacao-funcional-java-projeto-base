@@ -4,6 +4,10 @@ import exercicios.base.Aula;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.comparingDouble;
 
 /**
  * Esta é uma classe para você poder implementar as atividades propostas no README.
@@ -28,7 +32,7 @@ public class Aula06 extends Aula {
      * Este deve ser um predicado composto usando {@link Predicate#and(Predicate)}.
      * Você deve trocar o valor armazenado ao atributo para ele seguir a regra definida acima.
      */
-    private final Predicate<Estudante> mulheresAprovadas = null; //TODO: Atribua aqui o predicado composto com o filtro indicado acima
+    private final Predicate<Estudante> mulheresAprovadas = (e -> e.isMulher() && e.hasCurso() && e.getNota() >= 6); //não consegui usar o .and
 
     /**
      * Você pode chamar os métodos existentes e outros que você criar aqui,
@@ -37,7 +41,12 @@ public class Aula06 extends Aula {
      * do IntelliJ e selecione a opção "Run All Tests".
      */
     public Aula06() {
-        //TODO: Insira chamdas das funções existentes aqui, para você conferir como estão funcionando
+        //this.getEstudantesMulheresAprovadasOrdenadasPorCursoAndNota().forEach(System.out::println);
+        //this.getEstudantesMulheresAprovadasOrdenadasPorCursoCrescenteAndNotaDecrescente().forEach(System.out::println);
+        //this.getEstudantesMulheresAprovadasNaoOrdenadasModificavel().forEach(System.out::println);
+        //this.getEstudantesMulheresAprovadasOrdenadasPorCursoDecrescenteAndNotaCrescente().forEach(System.out::println);
+        //this.getEstudantesMulheresAprovadas().forEach(System.out::println);
+        //this.getEstudantesMulheresAprovadasOrdenadasTotalmenteDecrescente().forEach(System.out::println);
     }
 
     /**
@@ -56,8 +65,10 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadas() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        List<Estudante> listaAprovadas = estudantes.stream().
+                filter(mulheresAprovadas)
+                .toList();
+        return listaAprovadas;
     }
 
     /**
@@ -67,8 +78,12 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasPorCursoAndNota() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        var compararNotaDec = comparingDouble(Estudante::getNota);
+        var comparator = comparing(Estudante::getCurso).thenComparing(compararNotaDec);
+        List<Estudante> aprovadasPorCursoENota = getEstudantesMulheresAprovadas().stream()
+                .sorted(comparator)
+                .toList();
+        return aprovadasPorCursoENota;
     }
 
     /**
@@ -78,8 +93,12 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasPorCursoDecrescenteAndNotaCrescente() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        var compararNotaDec = comparingDouble(Estudante::getNota);
+        var comparator = comparing(Estudante::getCurso).reversed().thenComparing(compararNotaDec);
+        List<Estudante> aprovadasPorCursoENota = getEstudantesMulheresAprovadas().stream()
+                .sorted(comparator)
+                .toList();
+        return aprovadasPorCursoENota;
     }
 
     /**
@@ -90,8 +109,9 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasNaoOrdenadasModificavel() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        List<Estudante> aprovadasModificavel = getEstudantesMulheresAprovadas().stream()
+                .collect(Collectors.toList());
+        return aprovadasModificavel;
     }
 
     /**
@@ -101,8 +121,12 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasTotalmenteDecrescente() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        var comparingNota = comparingDouble(Estudante::getNota).reversed();
+        var comparator = comparing(Estudante::getCurso).reversed().thenComparing(comparingNota);
+        List<Estudante> aprovadasDecresente = getEstudantesMulheresAprovadas().stream()
+                .sorted(comparator)
+                .toList();
+        return aprovadasDecresente;
     }
 
     /**
@@ -112,7 +136,9 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasPorCursoCrescenteAndNotaDecrescente() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        List<Estudante> aprovadasCursoCreNotaDec = getEstudantesMulheresAprovadas().stream()
+                .sorted(comparing(Estudante::getCurso).thenComparing(comparing(Estudante::getNota).reversed()))
+                .toList();
+        return aprovadasCursoCreNotaDec;
     }
 }
